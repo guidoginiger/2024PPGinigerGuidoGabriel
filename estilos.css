@@ -4,18 +4,70 @@
 }
 
 h1{
-    color: darkblue;
+    color: white;
+    background-color: black;
     font-size: 40px;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     text-align: center;
+    border: 5px solid blue;
+    border-style: ridge;
+    border-radius: 10px;
 }
 
+.flex-container{
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    gap: 15px;    
+}
 
+#form_datos, #form_abm {
+    background-color: white;
+    border: 2px solid blue; 
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background-color: white;
+}
 
+#formulario_Abm {
+    display: flex;
+    flex-direction: column; 
+}
 
+.encabezado-tabla {
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    border: 1px solid grey;
+}
 
-/* BORDES --> grosor, color, estilo. 
-border: 5px solid blue;
-border-style: ridge; --> Estilo del borde. 
-border-radius: 10px;
-*/
+.checkbox-group{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+button {
+    background-color: darkcyan; 
+    color: white; 
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+#tabla_datos {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#tabla_datos thead th {
+    background-color: darkturquoise; 
+    color: white; 
+    padding: 10px;
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid black;
+}

@@ -1,0 +1,21 @@
+*{
+    background-color: white;
+    color: black;
+}
+
+h1{
+    color: darkblue;
+    font-size: 40px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    text-align: center;
+}
+
+
+
+
+
+/* BORDES --> grosor, color, estilo. 
+border: 5px solid blue;
+border-style: ridge; --> Estilo del borde. 
+border-radius: 10px;
+*/

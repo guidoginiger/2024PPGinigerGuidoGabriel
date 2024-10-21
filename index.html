@@ -13,7 +13,6 @@
     <script>
         class Vehiculo
         {
-
             constructor(id, modelo, anoFab, velMax){
                 this.id = id;
                 this.modelo = modelo;
@@ -23,13 +22,12 @@
 
             toString()
             {
-                return `Id: ${this.id}, Modelo: ${this.modelo}, Año Fab: ${this.anoFab}, Vel Max: ${this.velMax}`;
+                return `Id: ${this.id}, Modelo: ${this.modelo}, Año Fab: ${this.anoFab}, Velocidad Maxima: ${this.velMax}`;
             }
         }
 
         class Aereo extends Vehiculo
         {
-
             constructor(id, modelo, anoFab, velMax, altMax, autonomia)
             {
                 super(id, modelo, anoFab, velMax);
@@ -40,7 +38,7 @@
 
             toString()
             {
-                return `${super.toString()}, Alt Max: ${this.altMax}, Autonomia: ${this.autonomia}`;
+                return `${super.toString()}, Altura Maxima: ${this.altMax}, Autonomia: ${this.autonomia}`;
             }
         }
 
@@ -69,13 +67,12 @@
 
         vehiculos_array.forEach(vehiculo => {
 
-            if(vehiculo.cantPue !== undefined && vehiculo.cantRue !== undefined)
+            if(vehiculo.altMax !== undefined && vehiculo.autonomia !== undefined)
             {
                 let vehiculo_aereo = new Aereo(vehiculo.id, vehiculo.modelo, vehiculo.anoFab, vehiculo.velMax, vehiculo.altMax, vehiculo.autonomia);
-                vehiculos_instanciados_array.push(vehiculo_aereo);
-
+                vehiculos_instanciados_array.push(vehiculo_aereo);                
             }
-            else if (vehiculo.altMax !== undefined && vehiculo.autonomia !== undefined)
+            else if(vehiculo.cantPue !== undefined && vehiculo.cantRue !== undefined)
             {
                 let vehiculo_terrestre = new Terrestre(vehiculo.id, vehiculo.modelo, vehiculo.anoFab, vehiculo.velMax, vehiculo.cantPue, vehiculo.cantRue);
                 vehiculos_instanciados_array.push(vehiculo_terrestre);
@@ -83,11 +80,29 @@
         });
 
         // --- Funciones ---
-
         function mayusculaPrimerLetra(palabra)
         {
             return palabra.charAt(0).toUpperCase() + palabra.slice(1);
         }
+
+
+        function mostrar()
+        {
+            document.getElementById('filtro').value = 'todos';
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+
+            mostrarDatos();
+            
+            document.getElementById('filtro').addEventListener('change', () => {
+                mostrarDatos();
+            });
+        }
+
+        mostrar();
+
 
         function vaciarFormularioPrincipal()
         {
@@ -106,7 +121,7 @@
 
         function vaciarFormularioABM()
         {
-            document.querySelectorAll('#form_abm input').forEach(input => {
+            document.querySelectorAll('#formulario_abm input').forEach(input => {
                 input.value = '';
             });
 
@@ -117,13 +132,17 @@
         function mostrarFormulario()
         {
             document.getElementById('encabezado_tabla').style.display = "table-header-group";
-            document.getElementById('form_datos').style.display = 'block';
-            document.getElementById('form_abm').style.display = 'none';
+            document.getElementById('formulario_datos').style.display = 'block';
+            document.getElementById('formulario_abm').style.display = 'none';
 
-            document.getElementById('cuerpo_tabla_inicial').style.display = 'table-row-group'
+            let mensaje = document.getElementById("mensaje_error_abm");
+            mensaje.innerText = "";
+
+            document.getElementById('tabla_cuerpo_inicial').style.display = 'table-row-group'
 
             vaciarFormularioABM();
             vaciarFormularioPrincipal();
+            mostrar();
         }
 
         function calcularPromVelMax()
@@ -150,46 +169,42 @@
             document.getElementById('input_prom_vel_max').value = promedio;
         }
 
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                mostrarDatos();
-            });
-        });
-
 
         function mostrarDatos()
         {
-            let columnasSeleccionadas = [];
+            let columnasCheckeadas = [];
             let cuerpoTabla = document.getElementById('cuerpo_tabla');
             cuerpoTabla.innerHTML = "";            
 
             document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-                columnasSeleccionadas.push(checkbox.value);
-            });
+                columnasCheckeadas.push(checkbox.value);
+            }); 
 
+            let mensajeError = document.getElementById('mensaje_error');
 
-            // Encabezado
             let encabezado_tabla = document.getElementById('encabezado_tabla');
 
-            if(columnasSeleccionadas.length === 0)
+            if(columnasCheckeadas.length === 0)
             {
-                document.getElementById('cuerpo_tabla_inicial').style.display = 'table-row-group';
+                document.getElementById('tabla_cuerpo_inicial').style.display = 'table-row-group';
+                mensajeError.textContent = "ERROR. Elegir propiedad";
                 encabezado_tabla.style.display = "table-header-group";
                 return;
             }
             else
             {
-                document.getElementById('cuerpo_tabla_inicial').style.display = 'none';
+                document.getElementById('tabla_cuerpo_inicial').style.display = 'none';
+                mensajeError.textContent = "";
                 encabezado_tabla.style.display = "none";
             }
 
-            let encabezadoHtml = "<tr>";
-            columnasSeleccionadas.forEach(columna => {
-                encabezadoHtml += `<th id="titulo_${columna}">${mayusculaPrimerLetra(columna)} </th>`;
+            let encabezado_html = "<tr>";
+            
+            columnasCheckeadas.forEach(columna => {
+                encabezado_html += `<th id="titulo_${columna}" class="encabezado-tabla">${mayusculaPrimerLetra(columna)} </th>`;
             });
-
-            encabezadoHtml += "</tr>";
-            cuerpoTabla.innerHTML += encabezadoHtml;
+            encabezado_html += "</tr>";
+            cuerpoTabla.innerHTML += encabezado_html;
 
             let filtro = document.getElementById('filtro').value;
             let vehiculos_filtrados;
@@ -207,8 +222,7 @@
                 vehiculos_filtrados = vehiculos_instanciados_array.filter(vehiculo => vehiculo instanceof Terrestre);
             }
 
-            // Ordenar
-            columnasSeleccionadas.forEach(columna => {
+            columnasCheckeadas.forEach(columna => {
                 document.getElementById(`titulo_${columna}`).addEventListener('click', () => {
                     vehiculos_filtrados.sort((a, b) => {
                         if(a[columna] < b[columna])
@@ -219,7 +233,6 @@
                         {
                             return 1; 
                         }
-
                         return 0;
                     });
 
@@ -227,20 +240,17 @@
                 });
             });
 
-            // Filas
             vehiculos_filtrados.forEach(vehiculo => {
-                let filaHtml = "<tr>";
-                columnasSeleccionadas.forEach(columna => {
+                let fila_html = "<tr>";
+                columnasCheckeadas.forEach(columna => {
                     let dato_fila = vehiculo[columna] || "--";
-                    filaHtml += `<td id="dato_fila_vehiculo_con_id_${vehiculo.id}_${columna}">${dato_fila}</td>`;
+                    fila_html += `<td id="dato_fila_vehiculo_con_id_${vehiculo.id}_${columna}">${dato_fila}</td>`;
                 });
-
-                filaHtml += "</tr>";
+                fila_html += "</tr>";
 
                 let fila = document.createElement('tr');
-                fila.innerHTML = filaHtml;
+                fila.innerHTML = fila_html;
 
-                // Evento de dobleclick a la fila
                 fila.addEventListener('dblclick', () => {
                     obtenerVehiculoABM(vehiculo.id);
                 });
@@ -254,10 +264,10 @@
         {
             document.getElementById('id_vehiculo').value = id_vehiculo;
 
-            document.getElementById('form_datos').style.display = 'none';
-            document.getElementById('mostrarFormularioBtn').style.display = 'block';
-            document.getElementById('form_abm').style.display = 'block';
+            document.getElementById('formulario_datos').style.display = 'none';
+            document.getElementById('formulario_abm').style.display = 'block';
 
+            document.getElementById('mostrarFormularioBtn').style.display = 'block';
             document.getElementById('botonAceptar').style.display = 'none'; 
             document.getElementById('botonModificar').style.display = 'block';
             document.getElementById('botonEliminar').style.display = 'block';
@@ -265,14 +275,12 @@
             const camposAdicionales = document.getElementById('botones_fin_form');
             camposAdicionales.innerHTML = '';
 
-            let vehiculo = vehiculos_instanciados_array[id_vehiculo - 1];
-
+            let vehiculo = vehiculos_instanciados_array.find(vehiculo => vehiculo.id === id_vehiculo);
             document.getElementById('modelo').value = vehiculo.modelo;
             document.getElementById('anoFab').value = vehiculo.anoFab;
             document.getElementById('velMax').value = vehiculo.velMax;
 
             let tipo = document.getElementById('tipo');
-
             if(vehiculo instanceof Terrestre)
             {
                 tipo.value = 'terrestre';
@@ -308,27 +316,57 @@
             let autonomia = document.getElementById('autonomia');
             let tipo = document.getElementById('tipo').value;
 
-            let vehiculo = vehiculos_instanciados_array[id_vehiculo - 1];
+            let mensaje = document.getElementById("mensaje_error_abm");
 
-            // VALIDAR !!! 
+            let vehiculo = vehiculos_instanciados_array.find(vehiculo => vehiculo.id === id_vehiculo);
 
-            vehiculo.modelo = modelo;
-            vehiculo.anoFab = anoFab;
-            vehiculo.velMax = velMax;
-            vehiculo.cantPue = cantPue.value;
-            vehiculo.cantRue = cantRue.value;
-            vehiculo.altMax = altMax.value;
-            vehiculo.autonomia = autonomia.value;
+            if (!vehiculo)
+            {
+                mensaje.innerText = "ERROR. No se encontró el vehículo";
+                return;
+            }
 
-            alert(`Los datos de ${vehiculo.modelo} fueron modificados.`);
-            mostrarFormulario();
+            if (modelo === "" || anoFab === "" || anoFab <= 1885 || isNaN(velMax) || velMax === "" || velMax < 1)
+            {
+                mensaje.innerText = "ERROR. Faltan completar datos. (El año de fabricacion tiene que ser mayor a 1885 y la velocidad mayor a 0)";
+            } 
+            else {
+                vehiculo.modelo = modelo;
+                vehiculo.anoFab = anoFab; 
+                vehiculo.velMax = velMax; 
+
+                if (tipo === 'terrestre') {
+                    if (isNaN(cantPue.value) || cantPue.value === "" || isNaN(cantRue.value) || cantRue.value === "")
+                    {
+                        mensaje.innerText = "ERROR. Faltan completar datos";
+                        return;
+                    } else {
+                        vehiculo.cantPue = cantPue.value; 
+                        vehiculo.cantRue = cantRue.value; 
+                    }
+                }
+                else if (tipo === 'aereo') 
+                {
+                    if (isNaN(altMax.value) || altMax.value === "" || isNaN(autonomia.value) || autonomia.value === ""){
+                        mensaje.innerText = "ERROR. Faltan completar datos";
+                        return;
+                    } else {
+                        vehiculo.altMax = altMax.value; 
+                        vehiculo.autonomia = autonomia.value; 
+                    }
+                }
+
+                alert(`Los datos de ${vehiculo.modelo} se modificaron`);
+
+                mostrarFormulario();
+            }
         }
 
         function agregarVehiculo()
         {
-            document.getElementById('form_datos').style.display = 'none';
+            document.getElementById('formulario_datos').style.display = 'none';
             document.getElementById('mostrarFormularioBtn').style.display = 'block';
-            document.getElementById('form_abm').style.display = 'block';
+            document.getElementById('formulario_abm').style.display = 'block';
             document.getElementById('botonModificar').style.display = 'none';
             document.getElementById('botonAceptar').style.display = 'block';
             document.getElementById('botonEliminar').style.display = 'none';
@@ -340,48 +378,84 @@
         function eliminarVehiculo()
         {            
             let id_vehiculo = document.getElementById('id_vehiculo').value;
-            let indice = id_vehiculo - 1;
-            let vehiculo = vehiculos_instanciados_array[indice].modelo;
+            let indice = vehiculos_instanciados_array.findIndex(vehiculo => vehiculo.id === id_vehiculo);
+            let vehiculo = vehiculos_instanciados_array[indice];
 
-            let confirmar = confirm(`¿Eliminar ${vehiculo}?`);
+            if (indice === -1) {
+                alert('Vehículo no encontrado.');
+                return; 
+            }
 
-            if(confirmar == true)
+            let confirmar_eliminar = confirm(`¿Eliminar ${vehiculo}?`);
+
+            if(confirmar_eliminar == true)
             {
                 vehiculos_instanciados_array.splice(indice, 1);
 
                 mostrarFormulario();
+                mostrar();
             }            
         }
 
         function guardarDatos()
         {
+            let faltan_datos = false;
+            let mensaje = document.getElementById("mensaje_error_abm");
+            mensaje.innerText = "";
+
             let id = vehiculos_instanciados_array.length + 1;
             let modelo = document.getElementById('modelo').value;
             let anoFab = document.getElementById('anoFab').value;
             let velMax = parseInt(document.getElementById('velMax').value);
             let tipo = document.getElementById('tipo').value;
 
+            if (modelo === "" || anoFab <= 1885 || isNaN(velMax) || velMax < 0 || !tipo)
+            {
+                mensaje.textContent = "ERROR. Ingresar datos en todos los campos. (El año de fabricación tiene que ser mayor a 1885)";
+                faltan_datos = true;
+            }
+
             if(tipo === 'terrestre')
             {
                 let cantPue = parseFloat(document.getElementById('cantPue').value);
                 let cantRue = document.getElementById('cantRue').value;
 
-                // Creo un nuevo objeto de tipo Terrestre
-                let nuevoVehiculoTerrestre = new Terrestre(id, modelo, ano_fabrica, vel_maxima, cant_puertas, cant_ruedas);
-                vehiculos_instanciados_array.push(nuevoVehiculoTerrestre);
+                if (isNaN(cantPue) || cantPue < 0 || isNaN(cantRue) || cantRue < 1)
+                {
+                    mensaje.textContent = "ERROR. Reingrese cantidad de puertas y ruedas correspondientes.";
+                    faltan_datos = true;
+                }
+
+                if (!faltan_datos) 
+                {
+                    let nuevoTerrestre = new Terrestre(id, modelo, anoFab, velMax, cantPue, cantRue);
+                    vehiculos_instanciados_array.push(nuevoTerrestre);
+                }
 
             }
-            else if(tipo_vehiculo === 'aereo')
+            else if(tipo === 'aereo')
             {
                 let altMax = parseFloat(document.getElementById('altMax').value);
                 let autonomia = parseFloat(document.getElementById('autonomia').value);
+                
+                if (isNaN(altMax) || isNaN(autonomia) || altMax < 1 || autonomia <= 0)
+                {
+                    mensaje.textContent = "ERROR. Reingrese altura máxima y autonomia válidas. (Tienen que ser mayor a 0)";
+                    faltan_datos = true;
+                }
 
-                // Creo un nuevo objeto de tipo Aereo
-                let nuevoVehiculoAereo = new Aereo(id, modelo, anoFab, velMax, altMax, autonomia);
-                vehiculos_instanciados_array.push(nuevoVehiculoAereo);                
+                if (!faltan_datos)
+                {
+                    let nuevoAereo = new Aereo(id, modelo, anoFab, velMax, altMax, autonomia);
+                    vehiculos_instanciados_array.push(nuevoAereo);
+                }
             }
 
-            mostrarFormulario();
+            if (!faltan_datos)
+            {
+                mostrarFormulario();
+                mostrar();
+            }
         }
 
         function mostrarTiposSeleccionados()
@@ -425,6 +499,7 @@
             eliminarVehiculo();
             guardarDatos();
             mostrarTiposSeleccionados();
+            obtenerVehiculoABM();
         });
 
         
@@ -448,7 +523,7 @@
         </div>
 
         <!-- CHECKBOXES -->
-        <div class="checkbox-group">
+        <div class="checkbox">
             <input type="checkbox" id="id_checkbox" name="id" value="id" checked> ID
             <input type="checkbox" id="modelo_checkbox" name="modelo" value="modelo" checked> Modelo
             <input type="checkbox" id="anoFab_checkbox" name="anoFab" value="anoFab" checked> Año Fabrica
@@ -487,7 +562,7 @@
             </thead>
 
             <!-- CUERPO de la tabla -->
-            <tbody id="cuerpo_tabla_inicial">
+            <tbody id="tabla_cuerpo_inicial">
                 <tr>
                     <td>--</td>
                     <td>--</td>
@@ -516,9 +591,9 @@
     <!-- FIN FORMULARIO DATOS -->
 
     <!-- FORMULARIO ABM -->
-    <div id="formulario_abm">
+    <div id="form_abm">
 
-        <form id="form_abm" style="display: none;">
+        <form id="formulario_abm" style="display: none;">
             <h1>Formulario ABM</h1>
 
             <!-- ID -->

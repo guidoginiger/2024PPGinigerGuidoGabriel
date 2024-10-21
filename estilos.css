@@ -5,9 +5,14 @@
     font-size: 20px;
 }
 
+body{
+    padding: 10px;
+    margin: 2px;
+}
+
 h1{
     color: white;
-    background-color: black;
+    background-color: darkblue;
     font-size: 40px;    
     text-align: center;
     border: 5px solid blue;
@@ -21,53 +26,65 @@ h1{
     gap: 15px;
 }
 
-.checkbox-group{
+/* CHECKBOXES */
+.checkbox{
     display: flex;
     flex-wrap: wrap;
+    gap: 7px;
 }
 
+/* FORMULARIOS */
 #formulario_datos, #formulario_abm {
     background-color: white;
-    border: 2px solid blue; 
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    background-color: white;
+    border: 5px double darkblue; 
+    padding: 5px;
+    border-radius: 5px;
+    
 }
 
-#formulario_Abm {
+#form_abm{
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
-.encabezado-tabla {
-    background-color: blue;
-    color: white;
-    padding: 10px;
-    border: 1px solid grey;
-}
-
+/* BOTONES */
 button {
     background-color: darkcyan; 
     color: white; 
-    padding: 10px 15px;
+    padding: 5px 15px;
+    border:  3px groove black;
     border-radius: 5px;
 }
 
+button:hover{
+    background-color: cyan;
+}
+
+/* TABLA */
 #tabla_datos {
+    border-collapse: collapse;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
+/* ENCABEZADO de la tabla */
 #tabla_datos thead th {
-    background-color: darkturquoise; 
-    color: white; 
+    background-color: lightblue; 
+    color: black; 
     padding: 10px;
-    border: 1px solid black;
+    border: 2px solid darkcyan;
+    text-align: center;
 }
 
+/* CUERPO de la tabla */
 th, td {
+    background-color: lightcyan;
+    color: black;
     padding: 10px;
+    border: 2px solid darkcyan;
     text-align: left;
-    border: 1px solid black;
+}
+
+p {
+    margin: 7px 0;
 }

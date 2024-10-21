@@ -8,8 +8,149 @@
     <link rel="stylesheet" href="estilos.css">
 </head>
 
+<body>
 
-<!-- SCRIPT, JAVASCRIPT -->
+    <!-- FORMULARIO DATOS -->
+    <form id="formulario_datos">
+        <h1>Form Datos</h1>
+
+        <!-- FILTRAR POR -->
+        <div class="flex-container">
+            <label for="filtro">Filtrar por:</label>
+            <select id="filtro" name="filtro">
+                <option value="todos">Todos</option>
+                <option value="terrestre">Terrestre</option>
+                <option value="aereo">Aereo</option>
+            </select>
+        </div>
+
+        <!-- CHECKBOXES -->
+        <div class="checkbox">
+            <input type="checkbox" id="id_checkbox" name="id" value="id" checked> ID
+            <input type="checkbox" id="modelo_checkbox" name="modelo" value="modelo" checked> Modelo
+            <input type="checkbox" id="anoFab_checkbox" name="anoFab" value="anoFab" checked> Año de fabricación
+            <input type="checkbox" id="velMax_checkbox" name="velMax" value="velMax" checked> Velocidad máxima
+            <input type="checkbox" id="altMax_checkbox" name="altMax" value="altMax" checked> Altura máxima
+            <input type="checkbox" id="autonomia_checkbox" name="autonomia" value="autonomia" checked> Autonomía
+            <input type="checkbox" id="cantPue_checkbox" name="cantPue" value="cantPue" checked> Cantidad de puertas
+            <input type="checkbox" id="cantRue_checkbox" name="cantRue" value="cantRue" checked> Cantidad de ruedas
+        </div>
+
+        <!-- CALCULAR PROMEDIO VELOCIDAD MAXIMA -->
+        <div class="flex-container">
+            <label id="promedio_velMax">Promedio Velocidad Maxima:</label>
+            <input type="num" id="input_prom_vel_max" readonly>
+            <button type="button" onclick="calcularPromVelMax()">Calcular</button>
+        </div>
+
+        <p id="mensaje_error"></p>
+
+        <!-- TABLA -->
+        <table id="tabla_datos">
+
+            <!-- ENCABEZADO de la tabla -->
+            <thead id="encabezado_tabla">
+                <tr>
+                    <th>ID</th>
+                    <th>Modelo</th>
+                    <th>Año de fabricación</th>
+                    <th>Velocidad maxima</th>
+                    <th>Altura maxima</th>
+                    <th>Autonomia</th>
+                    <th>Cantidad de puertas</th>
+                    <th>Cantidad de ruedas</th>
+                </tr>
+            </thead>
+
+            <!-- CUERPO de la tabla -->
+            <tbody id="tabla_cuerpo_inicial">
+                <tr>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                </tr>
+            </tbody>
+
+            <tbody id="cuerpo_tabla">
+
+            </tbody>
+        </table>
+
+        <br>
+
+        <!-- BOTON AGREGAR VEHICULO -->
+        <div>
+            <button type="button" onclick="agregarVehiculo()">Agregar</button>
+        </div>
+
+    </form>
+    <!-- FIN FORMULARIO DATOS -->
+
+    <!-- FORMULARIO ABM -->
+    <div id="form_abm">
+
+        <form id="formulario_abm" style="display: none;">
+            <h1>Formulario ABM</h1>
+
+            <!-- ID -->
+            <div class="flex-container">
+                <label for="id_vehiculo">ID: </label>
+                <input type="number" id="id_vehiculo" name="id_vehiculo" readonly>
+            </div>
+
+            <!-- MODELO -->
+            <div class="flex-container">
+                <label for="modelo">Modelo: </label>
+                <input type="text" id="modelo" name="modelo">
+            </div>
+
+            <!-- AÑO FABRICACION -->
+            <div class="flex-container">
+                <label for="anoFab">Año fabricacion: </label>
+                <input type="text" id="anoFab" name="anoFab">
+            </div>
+
+            <!-- VELOCIDAD MAXIMA -->
+            <div class="flex-container">
+                <label for="velMax">Velocidad máxima: </label>
+                <input type="number" id="velMax" name="velMax">
+            </div>
+
+            <p id="mensaje_error_abm" style="color: yellow;"></p>
+
+            <!-- TIPO -->
+            <div class="flex-container">
+                <label for="tipo">Tipo: </label>
+                <select id="tipo" name="tipo">
+                    <option value="" selected disabled>Seleccionar tipo </option>
+                    <option value="terrestre">Terrestre</option>
+                    <option value="aereo">Aereo</option>
+                </select>
+            </div>
+
+            <div id="botones_fin_form"></div>
+    
+            <!-- BOTONES ACEPTAR / MODIFICAR / ELIMINAR / CANCELAR -->
+            <div class="flex-container">
+                    <button type="button" id='botonAceptar' onclick="guardarDatos()">Aceptar </button>
+                    <!-- 
+                    <button type="button" id='botonModificar' onclick="modificarDatos()">Modificar </button>
+                    <button type="button" id='botonEliminar' onclick="eliminarVehiculo()">Eliminar </button>
+                    -->
+                    <button type="button" id="mostrarFormularioBtn" onclick="mostrarFormulario()">Cancelar </button>
+            </div>
+            
+        </form>
+        <!-- FIN FORMULARIO ABM -->
+
+    </div>
+
+    <!-- SCRIPT, JAVASCRIPT -->
     <script>
         class Vehiculo
         {
@@ -103,32 +244,6 @@
 
         mostrar();
 
-
-        function vaciarFormularioPrincipal()
-        {
-            let cuerpoTabla = document.getElementById('cuerpo_tabla');
-            cuerpoTabla.innerHTML = "";
-
-            let modelo = document.getElementById('modelo');
-            modelo.innerText = "";
-
-            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = false; // Checkbox sin marcar
-            });
-
-            document.getElementById('input_prom_vel_max').value = "";
-        }
-
-        function vaciarFormularioABM()
-        {
-            document.querySelectorAll('#formulario_abm input').forEach(input => {
-                input.value = '';
-            });
-
-            document.getElementById('tipo').value = '';
-            document.getElementById('botones_fin_form').innerHTML = '';
-        }
-
         function mostrarFormulario()
         {
             document.getElementById('encabezado_tabla').style.display = "table-header-group";
@@ -169,6 +284,11 @@
             document.getElementById('input_prom_vel_max').value = promedio;
         }
 
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                mostrarDatos();
+            });
+        });
 
         function mostrarDatos()
         {
@@ -178,24 +298,22 @@
 
             document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
                 columnasCheckeadas.push(checkbox.value);
-            }); 
-
+            });
             let mensajeError = document.getElementById('mensaje_error');
 
-            let encabezado_tabla = document.getElementById('encabezado_tabla');
-
+            let encabezadoTabla = document.getElementById('encabezado_tabla');
             if(columnasCheckeadas.length === 0)
             {
-                document.getElementById('tabla_cuerpo_inicial').style.display = 'table-row-group';
+                document.getElementById('tabla_cuerpo_inicial').style.display = 'table-row-group'
                 mensajeError.textContent = "ERROR. Elegir propiedad";
-                encabezado_tabla.style.display = "table-header-group";
+                encabezadoTabla.style.display = "table-header-group";
                 return;
             }
             else
             {
                 document.getElementById('tabla_cuerpo_inicial').style.display = 'none';
                 mensajeError.textContent = "";
-                encabezado_tabla.style.display = "none";
+                encabezadoTabla.style.display = "none";
             }
 
             let encabezado_html = "<tr>";
@@ -265,9 +383,8 @@
             document.getElementById('id_vehiculo').value = id_vehiculo;
 
             document.getElementById('formulario_datos').style.display = 'none';
-            document.getElementById('formulario_abm').style.display = 'block';
-
             document.getElementById('mostrarFormularioBtn').style.display = 'block';
+            document.getElementById('formulario_abm').style.display = 'block';            
             document.getElementById('botonAceptar').style.display = 'none'; 
             document.getElementById('botonModificar').style.display = 'block';
             document.getElementById('botonEliminar').style.display = 'block';
@@ -397,6 +514,21 @@
             }            
         }
 
+        function vaciarFormularioPrincipal()
+        {
+            let cuerpoTabla = document.getElementById('cuerpo_tabla');
+            cuerpoTabla.innerHTML = "";
+
+            let modelo = document.getElementById('modelo');
+            modelo.innerText = "";
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            document.getElementById('input_prom_vel_max').value = "";
+        }
+
         function guardarDatos()
         {
             let faltan_datos = false;
@@ -485,165 +617,17 @@
         }
 
         document.getElementById('tipo').addEventListener('change', mostrarTiposSeleccionados);
-
-
-        window.addEventListener("load", () => {
-
-            vaciarFormularioPrincipal();
-            vaciarFormularioABM();
-            mostrarFormulario();
-            calcularPromVelMax();
-            mostrarDatos();
-            modificarDatos();
-            agregarVehiculo();
-            eliminarVehiculo();
-            guardarDatos();
-            mostrarTiposSeleccionados();
-            obtenerVehiculoABM();
-        });
-
         
+        function vaciarFormularioABM()
+        {
+            document.querySelectorAll('#formulario_abm input').forEach(input => {
+                input.value = '';
+            });
+
+            document.getElementById('tipo').value = '';
+            document.getElementById('botones_fin_form').innerHTML = '';
+        }
     </script>
-
-
-<body>
-
-    <!-- FORMULARIO DATOS -->
-    <form id="formulario_datos">
-        <h1>Form Datos</h1>
-
-        <!-- FILTRAR POR -->
-        <div class="flex-container">
-            <label for="filtro">Filtrar por:</label>
-            <select id="filtro" name="filtro">
-                <option value="todos">Todos</option>
-                <option value="terrestre">Terrestre</option>
-                <option value="aereo">Aereo</option>
-            </select>
-        </div>
-
-        <!-- CHECKBOXES -->
-        <div class="checkbox">
-            <input type="checkbox" id="id_checkbox" name="id" value="id" checked> ID
-            <input type="checkbox" id="modelo_checkbox" name="modelo" value="modelo" checked> Modelo
-            <input type="checkbox" id="anoFab_checkbox" name="anoFab" value="anoFab" checked> Año Fabrica
-            <input type="checkbox" id="velMax_checkbox" name="velMax" value="velMax" checked> Velocidad maxima
-            <input type="checkbox" id="altMax_checkbox" name="altMax" value="altMax" checked> Altura max
-            <input type="checkbox" id="autonomia_checkbox" name="autonomia" value="autonomia" checked> Autonomia
-            <input type="checkbox" id="cantPue_checkbox" name="cantPue" value="cantPue" checked> Cantidad de puertas
-            <input type="checkbox" id="cantRue_checkbox" name="cantRue" value="cantRue" checked> Cantidad de ruedas
-        </div>
-
-        <!-- CALCULAR PROMEDIO VELOCIDAD MAXIMA -->
-        <div class="flex-container">
-            <label id="promedio_velMax">Promedio Velocidad Maxima:</label>
-            <input type="num" id="input_prom_vel_max" readonly>
-            <button type="button" onclick="calcularPromVelMax()">Calcular</button>
-        </div>
-
-        <p>Tabla: </p>
-        <p id="mensaje_error" style="color: red;"></p>
-
-        <!-- TABLA -->
-        <table id="tabla_datos">
-
-            <!-- ENCABEZADO de la tabla -->
-            <thead id="encabezado_tabla">
-                <tr>
-                    <th>ID</th>
-                    <th>Modelo</th>
-                    <th>Año fab</th>
-                    <th>Velocidad maxima</th>
-                    <th>Altura maxima</th>
-                    <th>Autonomia</th>
-                    <th>Cantidad de puertas</th>
-                    <th>Cantidad de ruedas</th>
-                </tr>
-            </thead>
-
-            <!-- CUERPO de la tabla -->
-            <tbody id="tabla_cuerpo_inicial">
-                <tr>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                </tr>
-            </tbody>
-
-            <tbody id="cuerpo_tabla">
-
-            </tbody>
-        </table>
-
-        <br>
-
-        <!-- BOTON AGREGAR VEHICULO -->
-        <div>
-            <button type="button" onclick="agregarVehiculo()">Agregar</button>
-        </div>
-
-    </form>
-    <!-- FIN FORMULARIO DATOS -->
-
-    <!-- FORMULARIO ABM -->
-    <div id="form_abm">
-
-        <form id="formulario_abm" style="display: none;">
-            <h1>Formulario ABM</h1>
-
-            <!-- ID -->
-            <div class="flex-container">
-                <label for="id_vehiculo">ID: </label>
-                <input type="number" id="id_vehiculo" name="id_vehiculo" readonly>
-            </div>
-
-            <!-- MODELO -->
-            <div class="flex-container">
-                <label for="modelo">Modelo: </label>
-                <input type="text" id="modelo" name="modelo">
-            </div>
-
-            <!-- AÑO FABRICACION -->
-            <div class="flex-container">
-                <label for="anoFab">Año fabricacion: </label>
-                <input type="text" id="anoFab" name="anoFab">
-            </div>
-
-            <!-- VELOCIDAD MAXIMA -->
-            <div class="flex-container">
-                <label for="velMax">Velocidad maxima: </label>
-                <input type="number" id="velMax" name="velMax">
-            </div>
-
-            <!-- TIPO -->
-            <div class="flex-container">
-                <label for="tipo">Tipo: </label>
-
-                <select id="tipo" name="tipo">
-                    <option value="" selected disabled>Seleccionar tipo </option>
-                    <option value="terrestre">Terrestre</option>
-                    <option value="aereo">Aereo</option>
-                </select>
-            </div>
-
-            <div id="campos_terrestre_aereo"></div>
-    
-            <!-- BOTONES ACEPTAR CANCELAR -->
-            <div class="flex-container">
-                    <button type="button" id='botonAceptar' onclick="guardarDatos()">Aceptar </button>
-                    <button type="button" id='botonModificar' style="display: none;" onclick="modificarDatos()">Modificar </button>
-                    <button type="button" id='botonEliminar' style="display: none;" onclick="eliminarVehiculo()">Eliminar </button>
-                    <button type="button" id="mostrarFormularioBtn" onclick="mostrarFormulario()">Cancelar </button>
-            </div>
-        </form>
-        <!-- FIN FORMULARIO ABM -->
-
-    </div>
     
 </body>
 </html>

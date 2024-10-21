@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="estilos.css">
 </head>
 
+
+<!-- SCRIPT, JAVASCRIPT -->
     <script>
         class Vehiculo
         {
@@ -430,11 +432,12 @@
 
 
 <body>
-    <form id="form_datos">
 
+    <!-- FORMULARIO DATOS -->
+    <form id="formulario_datos">
         <h1>Form Datos</h1>
 
-        <!-- Filtro -->
+        <!-- FILTRAR POR -->
         <div class="flex-container">
             <label for="filtro">Filtrar por:</label>
             <select id="filtro" name="filtro">
@@ -444,40 +447,46 @@
             </select>
         </div>
 
-        <!-- Columnas checkbox -->
-        <div class="checkbox-group flex-container">
-            <input type="checkbox" id="id_checkbox" name="id" value="id"> ID
-            <input type="checkbox" id="modelo_checkbox" name="modelo" value="modelo"> Modelo
-            <input type="checkbox" id="anoFab_checkbox" name="anoFab" value="anoFab"> Año Fab
-            <input type="checkbox" id="velMax_checkbox" name="velMax" value="velMax"> Vel max
-            <input type="checkbox" id="altMax_checkbox" name="altMax" value="altMax"> Alt max
-            <input type="checkbox" id="autonomia_checkbox" name="autonomia" value="autonomia"> Autonomia
-            <input type="checkbox" id="cantPue_checkbox" name="cantPue" value="cantPue"> Cant puertas
-            <input type="checkbox" id="cantRue_checkbox" name="cantRue" value="cantRue"> Cant ruedas
+        <!-- CHECKBOXES -->
+        <div class="checkbox-group">
+            <input type="checkbox" id="id_checkbox" name="id" value="id" checked> ID
+            <input type="checkbox" id="modelo_checkbox" name="modelo" value="modelo" checked> Modelo
+            <input type="checkbox" id="anoFab_checkbox" name="anoFab" value="anoFab" checked> Año Fabrica
+            <input type="checkbox" id="velMax_checkbox" name="velMax" value="velMax" checked> Velocidad maxima
+            <input type="checkbox" id="altMax_checkbox" name="altMax" value="altMax" checked> Altura max
+            <input type="checkbox" id="autonomia_checkbox" name="autonomia" value="autonomia" checked> Autonomia
+            <input type="checkbox" id="cantPue_checkbox" name="cantPue" value="cantPue" checked> Cantidad de puertas
+            <input type="checkbox" id="cantRue_checkbox" name="cantRue" value="cantRue" checked> Cantidad de ruedas
         </div>
 
+        <!-- CALCULAR PROMEDIO VELOCIDAD MAXIMA -->
         <div class="flex-container">
             <label id="promedio_velMax">Promedio Velocidad Maxima:</label>
             <input type="num" id="input_prom_vel_max" readonly>
             <button type="button" onclick="calcularPromVelMax()">Calcular</button>
         </div>
 
-        <br>
+        <p>Tabla: </p>
+        <p id="mensaje_error" style="color: red;"></p>
 
+        <!-- TABLA -->
         <table id="tabla_datos">
+
+            <!-- ENCABEZADO de la tabla -->
             <thead id="encabezado_tabla">
                 <tr>
                     <th>ID</th>
                     <th>Modelo</th>
                     <th>Año fab</th>
-                    <th>Vel max</th>
-                    <th>Alt max</th>
+                    <th>Velocidad maxima</th>
+                    <th>Altura maxima</th>
                     <th>Autonomia</th>
-                    <th>Cant pue</th>
-                    <th>Cant rue</th>
+                    <th>Cantidad de puertas</th>
+                    <th>Cantidad de ruedas</th>
                 </tr>
             </thead>
 
+            <!-- CUERPO de la tabla -->
             <tbody id="cuerpo_tabla_inicial">
                 <tr>
                     <td>--</td>
@@ -498,38 +507,45 @@
 
         <br>
 
+        <!-- BOTON AGREGAR VEHICULO -->
         <div>
             <button type="button" onclick="agregarVehiculo()">Agregar</button>
         </div>
 
     </form>
+    <!-- FIN FORMULARIO DATOS -->
 
-    <!-- Formulario ABM -->
-    <div id="formulario_Abm">
-        <form id="form_abm" style="display: none">
+    <!-- FORMULARIO ABM -->
+    <div id="formulario_abm">
 
+        <form id="form_abm" style="display: none;">
             <h1>Formulario ABM</h1>
 
+            <!-- ID -->
             <div class="flex-container">
                 <label for="id_vehiculo">ID: </label>
                 <input type="number" id="id_vehiculo" name="id_vehiculo" readonly>
             </div>
 
+            <!-- MODELO -->
             <div class="flex-container">
                 <label for="modelo">Modelo: </label>
                 <input type="text" id="modelo" name="modelo">
             </div>
 
+            <!-- AÑO FABRICACION -->
             <div class="flex-container">
                 <label for="anoFab">Año fabricacion: </label>
                 <input type="text" id="anoFab" name="anoFab">
             </div>
 
+            <!-- VELOCIDAD MAXIMA -->
             <div class="flex-container">
-                <label for="velMax">Velocidad max: </label>
+                <label for="velMax">Velocidad maxima: </label>
                 <input type="number" id="velMax" name="velMax">
             </div>
 
+            <!-- TIPO -->
             <div class="flex-container">
                 <label for="tipo">Tipo: </label>
 
@@ -539,16 +555,18 @@
                     <option value="aereo">Aereo</option>
                 </select>
             </div>
+
+            <div id="campos_terrestre_aereo"></div>
     
-            <div id="botones_fin_form">
-                <div class="flex-container">
+            <!-- BOTONES ACEPTAR CANCELAR -->
+            <div class="flex-container">
                     <button type="button" id='botonAceptar' onclick="guardarDatos()">Aceptar </button>
-                    <button type="button" id='botonModificar' style="display: none" onclick="modificarDatos()">Modificar </button>
-                    <button type="button" id='botonEliminar' style="display: none" onclick="eliminarVehiculo()">Eliminar </button>
+                    <button type="button" id='botonModificar' style="display: none;" onclick="modificarDatos()">Modificar </button>
+                    <button type="button" id='botonEliminar' style="display: none;" onclick="eliminarVehiculo()">Eliminar </button>
                     <button type="button" id="mostrarFormularioBtn" onclick="mostrarFormulario()">Cancelar </button>
-                </div>
             </div>
         </form>
+        <!-- FIN FORMULARIO ABM -->
 
     </div>
     
